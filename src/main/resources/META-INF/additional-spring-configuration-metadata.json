@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "spring.activemq.queue.test",
+      "type": "java.lang.String",
+      "description": "Description for spring.activemq.queue.test."
+    },
+    {
+      "name": "spring.activemq.topic.test",
+      "type": "java.lang.String",
+      "description": "Description for spring.activemq.topic.test."
+    }
+  ] }

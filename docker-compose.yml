@@ -1,0 +1,31 @@
+version: '3.1'
+services:
+  activemq:
+    image: rmohr/activemq
+    restart: always
+    ports:
+      - 49156:1883  # mqtt
+      - 49155:5672  # amqp
+      - 49154:61613 # stomp
+      - 49153:61614 # ws
+      - 61616:61616 # openwire
+      - 8161:8161   # activeMQ GUI
+    #    volumes:
+    #    - /your/persistent/dir/conf:/opt/activemq/conf
+    #    - /your/persistent/dir/data:/opt/activemq/data
+  database:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+  #    volumes:
+  #    - /my/own/datadir:/var/lib/mysql
+  backend:
+    depends_on:
+      - database
+      - activemq
+    build: .
+    restart: always
+    command: java -jar /app.jar --spring.datasource.url="jdbc:mysql://database/edist?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false" --spring.activemq.broker-url="tcp://activemq:61616"
+    ports:
+      - 8081:8080
